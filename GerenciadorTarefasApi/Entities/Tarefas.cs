@@ -13,3 +13,4 @@ public class Tarefas
     public int UsuarioId { get; set; }
     public Usuarios? Usuarios { get; set; }
 }
+ 
