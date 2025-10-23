@@ -1,0 +1,35 @@
+using System;
+using GerenciadorTarefasApi.Entities;
+using GerenciadorTarefasApi.Infra.Context;
+using GerenciadorTarefasApi.Infra.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace GerenciadorTarefasApi.Infra.Repositories;
+
+public class TarefaDBRepository : ITarefaRepository
+{
+    private readonly TarefaContext _context;
+
+    public TarefaDBRepository(TarefaContext context) { _context = context; }
+
+    public Tarefas Adicionar(Tarefas novaTarefa)
+    {
+        _context.Tarefas.Add(novaTarefa);
+        _context.SaveChanges();
+        return novaTarefa;
+    }
+
+    public Tarefas? ObterPorId(int id)
+    {
+        return _context.Tarefas
+            .Include(t => t.Usuarios)
+            .FirstOrDefault(p => p.Id == id);
+    }
+
+    public List<Tarefas> ObterTodos()
+    {
+        return _context.Tarefas
+        .Include(t => t.Usuarios)
+        .ToList();
+    }
+}
